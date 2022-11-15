@@ -41,8 +41,14 @@ The display largley follows the suggested sketch from part A. But there are a fe
 At startup there nothing displayed except a power button. This is done to ensure full functionality that a mirtror should have. The settings button for advanced featrures also toggles the displayu of the advamced feature buttons as thease will be less used that the buttoin for genaral information. 
 
 ![startup](https://user-images.githubusercontent.com/82000483/201829502-7892d734-6d99-4624-8c55-8e2b780363f8.png)
+
+#### After clicking power button
+
 ![startup2](https://user-images.githubusercontent.com/82000483/201829507-04cf5696-803c-4b4f-b637-d50c9c256801.png)
 
+#### After clicking settings button
+
+![startup3](https://user-images.githubusercontent.com/82000483/201832616-3ffab22b-473d-4738-87a3-e1a6a12cbfce.png)
 
 ### News
 
