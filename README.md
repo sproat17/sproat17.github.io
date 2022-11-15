@@ -45,6 +45,10 @@ In the implemetation, the time has been moved to the top right of the screen. Th
 
 ![startup](https://user-images.githubusercontent.com/82000483/201829502-7892d734-6d99-4624-8c55-8e2b780363f8.png)
 
+#### Notifications
+
+The notifications icon will be red if there are unread notications. After reading the notications the notifications button will resemble all other buttons. 
+
 #### After clicking power button
 
 ![startup2](https://user-images.githubusercontent.com/82000483/201829507-04cf5696-803c-4b4f-b637-d50c9c256801.png)
@@ -59,7 +63,7 @@ The news is still constantly displayed at the ticker, however you can manually c
 
 ### Weather
 
-The amount of days that weather button displays are exteneded to show the entire week of weather. The heading text was removed as the were redundat and can be easily understood with the obstruction in final implemtaion. 
+The amount of days that weather button displays are exteneded to show the entire week of weather. The heading text was removed as they were redundat and can be easily understood without the clutter. 
 
 ![weahter](https://user-images.githubusercontent.com/82000483/201829524-95bc1c20-0443-4165-aa29-946ceaa1c45d.png)
 
