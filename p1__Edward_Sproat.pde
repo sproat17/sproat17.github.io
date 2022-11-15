@@ -1,11 +1,13 @@
 import processing.video.*;
 import grafica.*; // https://github.com/jagracar/grafica/blob/master/examples refrenced for grapgh
-
-//icons should be 50 percent of buttons
-// light bulb adds 3 entries fro rgb and a slider for brightness add tint with their rgb values
+import javax.swing.JColorChooser;
+import java.awt.Color;
 
 PImage back, calandar, forward, health, light, news, notification, tools, weather, power, setting, scale, sleep, time, walk, cloudy, partly, snowy, stormy, backImg, check, uncheck, fitness;
 PShape mediumBox, newsBox, smallBox, topBox, dayBox;
+
+color c = color(255, 255, 255);
+Color javaColor;
 
 boolean settings = false;
 boolean mirror = false;
@@ -26,11 +28,13 @@ String [] possibleDays = {"Sunday", "Monday", "Tuesday", "Wedsday", "Thursday", 
 String [] loadedArticles = {"today", "today", "yesterday", "10/29", "10/28", "10/27", "11/5", "10/25", "yesterday", "10/29", "10/28", "10/27", "10/26", "10/25"};
 int newsArticle = 0;
 int newsRows = 0;
+int clickedNotification = 255;
 
 
 void setup() {
   size(1200, 1000, P2D);
 
+  //get camera
   String[] cameras = Capture.list();
   cam = new Capture(this, cameras[0]);
   cam.start();
@@ -72,60 +76,60 @@ void setup() {
   newsTable = loadTable("/home/edward/Desktop/testTicker/sketch_221102a/data/newsData.csv", "header");
 
 
+  //get news from file
   for (TableRow row : newsTable.rows()) {
 
     String newsString = row.getString("newsString");
     String genre = row.getString("genre");
-/*
+    /*
     if(genre.equals("Sports") && sports){
-      loadedArticles[newsRows] = (genre + ": " + newsString);
-      newsRows++;
-    }
-    
-    if(genre.equals("Politics") && politics){
-      loadedArticles[newsRows] = (genre + ": " + newsString);
-      newsRows++;
-    }
-    
-    if(genre.equals("Economics") && economics){
-      loadedArticles[newsRows] = (genre + ": " + newsString);
-      newsRows++;
-    }
-    
-    if(genre.equals("Technology") && technology){
-      loadedArticles[newsRows] = (genre + ": " + newsString);
-      newsRows++;
-    }
+     loadedArticles[newsRows] = (genre + ": " + newsString);
+     newsRows++;
+     }
+     
+     if(genre.equals("Politics") && politics){
+     loadedArticles[newsRows] = (genre + ": " + newsString);
+     newsRows++;
+     }
+     
+     if(genre.equals("Economics") && economics){
+     loadedArticles[newsRows] = (genre + ": " + newsString);
+     newsRows++;
+     }
+     
+     if(genre.equals("Technology") && technology){
+     loadedArticles[newsRows] = (genre + ": " + newsString);
+     newsRows++;
+     }
+     
+     */
 
-    */
-    
     loadedArticles[newsRows] = (genre + ": " + newsString);
-      newsRows++;
+    newsRows++;
   }
 }
 
 
 void draw() {
 
+  tint(c, 100);
+
+  //get time
   int m = minute();  // Values from 0 - 59
   int h = hour();    // Values from 0 - 23
-  int y = year();  // Values from 0 - 59
-  int d = day();
-  int mo = month();
   String time;
-
+  
   if (m > 10) {
     time = Integer.toString(h) + ":" + Integer.toString(m);
   } else {
     time = Integer.toString(h) + ":0" + Integer.toString(m);
   }
 
-  String ticker = "Breaking News: Kendall is an idiot";
+
 
   if (cam.available() == true) {
     cam.read();
   }
-
   image(cam, 0, 0, width, height);
 
 
@@ -139,7 +143,10 @@ void draw() {
     shape(smallBox, width * .1, 0);
     image(setting, width * .1 + 35, 5);
     shape(smallBox, width * .2, 0);
+    fill(clickedNotification, 0, 0, 100 * clickedNotification);
+    rect(width * .2, 0, width * .1, height/15);
     image(notification, width * .2 + 33, 5);
+    fill(0);
     shape(smallBox, width * .9, 0);
     text(time, width * .9+ 10, 50);
 
@@ -190,6 +197,7 @@ void mouseClicked() {
   }
 
   //mirror has to be on to press buttons except power
+  //calcualte where clicked and exectute new applet
   if (mirror) {
     if (mouseX >= 0 && mouseX <= width/10 && mouseY >= height/3 && mouseY <= (height/3 + height/10)) {
       HealthWindow healthWindow = new HealthWindow();
@@ -249,7 +257,11 @@ void mouseClicked() {
     }
 
     if (mouseX >= width * .2 && mouseX <= width * .3   && mouseY >= 0 && mouseY <= height/15) {
-      println("notifications");
+      if (clickedNotification != 0) {
+        NotificationWindow notificationWindow = new NotificationWindow();
+        runSketch(new String[]{"Notifications"}, notificationWindow);
+      }
+      clickedNotification = 0;
     }
   }
 }
@@ -261,21 +273,20 @@ class HealthWindow extends PApplet {
   }
 
   public void draw() {
-
-    //fill(0, 100, 150);
-    //rect(0, 0, 800, 600);
-
+    
+    //background
     background(255, 255, 255);
     tint(200, 150, 0, 100);
-    fitness.resize(800,600);
+    fitness.resize(800, 600);
     image(fitness, 0, 0);
 
-
+    //icons
     image(sleep, 800 * .20-50, 600/7);
     image(scale, 800 * .40-30, 600/7);
     image(walk, 800 * .60, 600/7);
     image(time, 800 *.8, 600/7);
-
+    
+    //icon text
     fill(0);
     textSize(21);
     text("Sleep", 800 * .20-50, 600/7 + 70);
@@ -294,7 +305,7 @@ class HealthWindow extends PApplet {
 
 
 
-
+      //load data
       for (int row = 0; row < table.getRowCount(); row++) {
         float dates  =table.getFloat(row, "date");
         float weight = table.getFloat(row, "weight");
@@ -363,64 +374,54 @@ class CalandarWindow extends PApplet {
     int y = year();
     int d = day();
 
+    //header of calaendar
     String header = (months[mo-1]) + " " + y;
-
     fill(0);
     textSize(70);
     textAlign(CENTER);
     text(header, 400, 100);
 
+    //display heading for boxes
     textSize(20);
     for (int i = 0; i< 7; i++) {
       text(daysOfWeek[i], 100*i + 100, 175);
     }
-    
-    triangle(670,58, 670, 98, 725, 78);
-    triangle(135,58, 135, 98, 80, 78);
-    
+
+    triangle(670, 58, 670, 98, 725, 78);
+    triangle(135, 58, 135, 98, 80, 78);
+
 
     textAlign(BOTTOM, LEFT);
 
-    //call function with first day of the week
-    // i*j = day
-    
+   
     int c = 1;
     int n = 1;
-    
     int start = 2;
-    
-  
-    for (int i = 0; i< 7; i++) {   
+
+    //display calanedar
+    for (int i = 0; i< 7; i++) {
       c = n;
       for (int j= 0; j< 5; j++) {
-
-        
-
-        
-        if(c-start == d){
+        if (c-start == d) {
           fill(255, 0, 0);
           text(c-start, 100*i + 65, 75*j + 215);
           shape(dayBox, 100*i + 60, 75 * j + 200);
           fill(0);
         } else {
           shape(dayBox, 100*i + 60, 75 * j + 200);
-          if((c-start) > 0 && (c-start) < 31){
+          if ((c-start) > 0 && (c-start) < 31) {
             text(c -start, 100*i + 65, 75*j + 215);
           }
-          if((c-start) == 24){
+          if ((c-start) == 24) {
             text(c -start, 100*i + 65, 75*j + 215);
-              textSize(12);
-              fill(0, 0, 255);
+            textSize(12);
+            fill(0, 0, 255);
             text("Thanksgiving", 100*i + 65, 75*j + 235);
-              textSize(20);
-              fill(0);
+            textSize(20);
+            fill(0);
           }
         }
-        
         c += 7;
-       
-         
-        
       }
       n += 1;
     }
@@ -445,7 +446,7 @@ class WeatherWindow extends PApplet {
     text("Weather Forecast", 115, 50);
     line(50, 60, 550, 60);
     tint(255, 255, 255);
-    
+
     weatherTable = loadTable("/home/edward/Desktop/testingHealth (copy 1)/test/data/weatherData.csv", "header");
 
     int i = 0;
@@ -478,7 +479,6 @@ class WeatherWindow extends PApplet {
       }
 
 
-
       text(high + "°", 400, 115 + 75 * i);
       text(low + "°", 500, 115 + 75 * i);
       i++;
@@ -497,15 +497,37 @@ class ToolsWindow extends PApplet {
   }
 }
 
-class LighthWindow extends PApplet {
+class NotificationWindow extends PApplet {
 
   public void settings() {
-    size(800, 600);
+    size(400, 100);
   }
 
   public void draw() {
-    background(255, 255, 255);
-    ellipse(mouseX, mouseY, 20, 20);
+    fill(255);
+    rect(0, 0, 400, 100);
+    fill(0);
+
+    text("You have a doctors appointment with Dr. Ryan at 5 o'clock today", 10, 50);
+  }
+}
+
+class LighthWindow extends PApplet {
+
+  public void settings() {
+    size(400, 400);
+
+    //color class
+    javaColor  = JColorChooser.showDialog(null, "Java Color Chooser", Color.white);
+    if (javaColor!=null)
+    c = color(javaColor.getRed(), javaColor.getGreen(), javaColor.getBlue());
+  }
+
+  public void draw() {
+    textSize(50);
+    fill(255);
+    background(c);
+    text("Your New Color", 40, 200);
   }
 }
 
@@ -518,99 +540,97 @@ class NewsWindow extends PApplet {
   public void draw() {
     background(255);
     fill(0);
-    
+
     //top
     textSize(20);
     text("Genre", 5, 20);
     text("Show", 120, 20);
     text("Don't Show", 200, 20);
     line(3, 25, 297, 25);
-    
-    check.resize(25,25);
-    uncheck.resize(25,25);
-    
+
+    check.resize(25, 25);
+    uncheck.resize(25, 25);
+
     //rows
     textSize(15);
     text("Politics", 5, 50);
     text("Economics", 5, 80);
     text("Sports", 5, 110);
     text("Technology", 5, 140);
-    
-    if(politics){
+
+    if (politics) {
       image(check, 130, 30);
       image(uncheck, 230, 30);
     } else {
       image(uncheck, 130, 30);
       image(check, 230, 30);
     }
-    
-    if(economics){
+
+    if (economics) {
       image(check, 130, 60);
       image(uncheck, 230, 60);
     } else {
       image(uncheck, 130, 60);
       image(check, 230, 60);
     }
-    
-    if(sports) {
+
+    if (sports) {
       image(check, 130, 90);
-      image(uncheck, 230,90);
+      image(uncheck, 230, 90);
     } else {
       image(uncheck, 130, 90);
-      image(check, 230,90);
+      image(check, 230, 90);
     }
-    
-    if(technology){
+
+    if (technology) {
       image(check, 130, 120);
       image(uncheck, 230, 120);
     } else {
-       image(uncheck, 130, 120);
+      image(uncheck, 130, 120);
       image(check, 230, 120);
     }
   }
-  
+
   public void mouseClicked() {
 
     //show politics
     if (mouseX >= 130 && mouseX <= 155 && mouseY >= 30 && mouseY <= 55) {
       politics = true;
     }
-    
+
     //show ecomics
     if (mouseX >= 130 && mouseX <= 155 && mouseY >= 60 && mouseY <= 85) {
       economics = true;
     }
-    
+
     //show sports
     if (mouseX >= 130 && mouseX <= 155 && mouseY >= 90 && mouseY <= 115) {
       sports = true;
     }
-    
+
     //show tech
     if (mouseX >= 130 && mouseX <= 155 && mouseY >= 120 && mouseY <= 145) {
       technology = true;
     }
-    
+
     //hide politics
     if (mouseX >= 230 && mouseX <= 255 && mouseY >= 30 && mouseY <= 55) {
       politics = false;
     }
-    
+
     //hide ecomics
     if (mouseX >= 230 && mouseX <= 255 && mouseY >= 60 && mouseY <= 85) {
       economics = false;
     }
-    
+
     //hide sports
     if (mouseX >= 230 && mouseX <= 255 && mouseY >= 90 && mouseY <= 115) {
       sports = false;
     }
-    
+
     //hide tech
     if (mouseX >= 230 && mouseX <= 255 && mouseY >= 120 && mouseY <= 145) {
       technology = false;
     }
-
-
   }
 }
