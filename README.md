@@ -94,5 +94,5 @@ The JColorChooser class was implemented to act as a lighting source with a varie
 
 ### Video (please click on the below image)
 
-[![Everything Is AWESOME](http://i.imgur.com/Ot5DWAW.png)](https://www.youtube.com/watch?v=FmsBaypUNxQ)
+[![Everything Is AWESOME]([http://i.imgur.com/Ot5DWAW.png](https://user-images.githubusercontent.com/82000483/202055985-6a685a39-d82e-4e1f-8db9-48ef73efd7ef.png))](https://www.youtube.com/watch?v=FmsBaypUNxQ)
 
