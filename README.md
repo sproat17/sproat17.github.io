@@ -92,4 +92,7 @@ The JColorChooser class was implemented to act as a lighting source with a varie
 ![color](https://user-images.githubusercontent.com/82000483/201832219-ec1f3f21-a3b2-4848-a277-2b4a32a2f2ce.gif)
 
 
-### Video
+### Video (please click on the below image)
+
+[![Everything Is AWESOME](http://i.imgur.com/Ot5DWAW.png)](https://youtu.be/StTqXEQ2l-Y?t=35s "Everything Is AWESOME")
+
